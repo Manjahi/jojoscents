@@ -1,26 +1,89 @@
 @import "tailwindcss";
 
+
+/* Luxury feel: calm contrast, soft edges, lots of whitespace */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Base canvas (warm luxury) */
+  --bg: 252 248 242;        /* warm cream */
+  --fg: 18 18 20;           /* near-black */
+  --muted: 110 106 100;     /* warm gray */
+
+  /* Surfaces */
+  --card: 255 252 247;      /* slightly lifted */
+  --border: 232 224 214;
+
+  /* Accent (choose ONE personality) */
+  --accent: 153 88 38;      /* amber-brown (luxury) */
+  --accent-soft: 153 88 38; /* same accent used with low alpha in Tailwind */
+
+  --radius: 20px;
+
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+[data-theme="dark"] {
+  /* Deep, not pure black (premium) */
+  --bg: 12 12 14;          /* charcoal */
+  --fg: 244 241 235;       /* soft white */
+  --muted: 170 164 154;
+
+  --card: 18 18 22;
+  --border: 40 38 34;
+
+  /* Accent shifts slightly warmer in dark */
+  --accent: 198 132 76;     /* warm amber */
+  --accent-soft: 198 132 76;
+
+  color-scheme: dark;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Soft background glow for depth (luxury, not loud) */
+.bg-glow {
+  position: relative;
+}
+
+.bg-glow::before {
+  content: "";
+  position: fixed;
+  inset: -20%;
+  pointer-events: none;
+  background:
+    radial-gradient(600px 400px at 20% 20%, rgb(var(--accent) / 0.10), transparent 60%),
+    radial-gradient(700px 500px at 80% 30%, rgb(var(--accent) / 0.06), transparent 65%),
+    radial-gradient(800px 600px at 40% 80%, rgb(var(--accent) / 0.05), transparent 70%);
+  filter: blur(10px);
+  opacity: 1;
+}
+
+/* Elegant link behavior (site-wide) */
+a {
+  color: rgb(var(--fg));
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+  transition: color 0.25s ease;
+}
+
+a:hover {
+  color: rgb(var(--accent));
+}
+
+html, body {
+  height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: rgb(var(--bg));
+  color: rgb(var(--fg));
+  letter-spacing: -0.01em;
+}
+
+/* Subtle grain (optional): place a tiny grain png in /public/images/grain.png */
+.grain::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  background: url("/images/grain.png");
+  mix-blend-mode: overlay;
 }

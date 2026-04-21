@@ -1,65 +1,104 @@
-import Image from "next/image";
+import FullBleed from "@/components/FullBleed";
+import HeroImageCarousel from "@/components/HeroImageCarousel";
+import ProductGrid, { Product } from "@/components/ProductGrid";
+import NewsletterSection from "@/components/NewsletterSection";
+import ContactSection from "@/components/ContactSection";
+import Reveal from "@/components/Reveal";
+import { getList, getFeaturedImageUrl, type WPPost } from "@/lib/wp";
+import { stripHtml } from "@/lib/sanitize";
 
-export default function Home() {
+function wpToProduct(post: WPPost): Product {
+  return {
+    id: String(post.id),
+    name: stripHtml(post.title.rendered),
+    price: post.acf?.price ?? post.meta?.price ?? "",
+    details: stripHtml(post.excerpt?.rendered ?? ""),
+    image: getFeaturedImageUrl(post) || "/images/products/placeholder.webp",
+    href: `/scents/${post.slug}`,
+  };
+}
+
+export default async function HomePage() {
+  const womensCatId = process.env.WP_WOMENS_CAT_ID;
+  const mensCatId = process.env.WP_MENS_CAT_ID;
+
+  let forWomen: Product[] = [];
+  let forMen: Product[] = [];
+  let featured: Product[] = [];
+
+  if (womensCatId && mensCatId) {
+    const [wRaw, mRaw] = await Promise.all([
+      getList("scents", { categories: womensCatId, per_page: "3" }),
+      getList("scents", { categories: mensCatId, per_page: "3" }),
+    ]);
+    forWomen = wRaw.map(wpToProduct);
+    forMen = mRaw.map(wpToProduct);
+  } else {
+    const raw = await getList("scents", { per_page: "6" });
+    featured = raw.map(wpToProduct);
+  }
+
+  const hasSplit = forWomen.length > 0 || forMen.length > 0;
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <>
+      <FullBleed>
+        <HeroImageCarousel />
+      </FullBleed>
+
+      <section className="mt-16 md:mt-24">
+        <div className="grid md:grid-cols-2 gap-10 md:gap-16">
+          <Reveal>
+            <h2 className="text-2xl md:text-3xl">Fragrance speaks louder than words.</h2>
+          </Reveal>
+
+          <Reveal delay={0.08}>
+            <p className="text-muted leading-relaxed">
+              Built to feel like a luxury magazine: whitespace, restraint, and slow
+              motion—optimized for both desktop and mobile from day one.
+            </p>
+          </Reveal>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </section>
+
+      {hasSplit ? (
+        <>
+          {forWomen.length > 0 && (
+            <Reveal delay={0.06}>
+              <ProductGrid
+                title="Women's Best Sellers"
+                subtitle="A curated edit of signature scents."
+                products={forWomen}
+              />
+            </Reveal>
+          )}
+          {forMen.length > 0 && (
+            <Reveal delay={0.08}>
+              <ProductGrid
+                title="Men's Best Sellers"
+                subtitle="Quiet power, refined presence."
+                products={forMen}
+              />
+            </Reveal>
+          )}
+        </>
+      ) : featured.length > 0 ? (
+        <Reveal delay={0.06}>
+          <ProductGrid
+            title="Featured Scents"
+            subtitle="A curated edit of our collection."
+            products={featured}
+          />
+        </Reveal>
+      ) : null}
+
+      <Reveal delay={0.1}>
+        <NewsletterSection />
+      </Reveal>
+
+      <Reveal delay={0.12}>
+        <ContactSection />
+      </Reveal>
+    </>
   );
 }
