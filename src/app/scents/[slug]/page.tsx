@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import Reveal from "@/components/Reveal";
+import AddToCart from "@/components/AddToCart";
 import { getProductBySlug } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
 import type { SanityProduct } from "@/lib/sanity/types";
@@ -116,16 +117,24 @@ export default async function ScentDetail({ params }: { params: Promise<{ slug: 
           {/* CTA */}
           <Reveal delay={0.18}>
             <div className="mt-8 flex flex-wrap gap-3">
+              <AddToCart
+                id={product._id}
+                name={product.name}
+                priceAmount={product.priceAmount ?? 0}
+                priceDisplay={product.price ?? ""}
+                image={heroImage(product)}
+                slug={product.slug}
+              />
               <Link
                 href={waUrl}
                 target="_blank"
-                className="rounded-xl2 border border-border bg-card px-5 py-3 text-sm hover:border-fg/30 transition-colors"
+                className="rounded-xl2 border border-border bg-transparent px-5 py-3 text-sm text-muted hover:border-[rgb(var(--fg)/0.3)] transition-colors"
               >
-                Get this scent via WhatsApp →
+                WhatsApp →
               </Link>
               <Link
                 href="/inquire"
-                className="rounded-xl2 border border-border bg-transparent px-5 py-3 text-sm text-muted hover:border-fg/30 transition-colors"
+                className="rounded-xl2 border border-border bg-transparent px-5 py-3 text-sm text-muted hover:border-[rgb(var(--fg)/0.3)] transition-colors"
               >
                 Inquire
               </Link>

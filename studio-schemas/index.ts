@@ -1,4 +1,4 @@
 import { product } from "./product";
+import { journal } from "./journal";
 
-// Journal schema to be added here once ready
-export const schemaTypes = [product];
+export const schemaTypes = [product, journal];

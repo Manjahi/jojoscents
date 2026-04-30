@@ -82,6 +82,21 @@ export const product = defineType({
       of: [{ type: "image", options: { hotspot: true } }],
     }),
     defineField({
+      name: "priceAmount",
+      title: "Price (KSh, numeric)",
+      description: "Used for cart totals and checkout. e.g. 3500",
+      type: "number",
+    }),
+    defineField({
+      name: "season",
+      title: "Season / Use",
+      type: "array",
+      of: [{ type: "string" }],
+      options: {
+        list: ["Day","Night","Summer","Winter","All Season","Special Occasion","Layering","Gift"],
+      },
+    }),
+    defineField({
       name: "featured",
       title: "Featured / Best Seller",
       description: "Show on the homepage best sellers grid.",

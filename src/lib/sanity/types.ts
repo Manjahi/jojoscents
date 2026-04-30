@@ -5,7 +5,9 @@ export type SanityProduct = {
   audience?: "Women" | "Men" | "Unisex";
   family?: string;
   mood?: string[];
+  season?: string[];
   price?: string;
+  priceAmount?: number;
   shortDescription?: string;
   notes?: string[];
   mainImage?: unknown;

@@ -87,3 +87,10 @@ body {
   background: url("/images/grain.png");
   mix-blend-mode: overlay;
 }
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
