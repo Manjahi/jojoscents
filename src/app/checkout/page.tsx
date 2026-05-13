@@ -19,6 +19,7 @@ export default function CheckoutPage() {
   const [mounted, setMounted] = useState(false);
   const { items, subtotal, clearCart } = useCart();
 
+  const [orderId] = useState(() => `JJS-${Date.now()}`);
   const [step, setStep] = useState<Step>("delivery");
   const [form, setForm] = useState({
     name: "", phone: "", email: "", address: "", delivery: "cbd",
@@ -43,7 +44,6 @@ export default function CheckoutPage() {
   const delivery = DELIVERY_OPTIONS.find((o) => o.id === form.delivery)!;
   const sub = subtotal();
   const total = sub + delivery.price;
-  const orderId = `JJS-${Date.now()}`;
 
   function setField(key: string) {
     return (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
@@ -111,7 +111,7 @@ export default function CheckoutPage() {
   }
 
   const inputClass =
-    "w-full rounded-xl2 border border-border bg-transparent px-4 py-3 text-sm outline-none focus:border-fg/40 transition-colors";
+    "w-full rounded-xl2 border border-border bg-transparent px-4 py-3 text-sm outline-none focus:border-[rgb(var(--fg)/0.4)] transition-colors";
 
   return (
     <section className="pt-12 md:pt-16">
@@ -150,7 +150,7 @@ export default function CheckoutPage() {
                 <p className="text-xs uppercase tracking-[0.18em] text-muted mb-3">Delivery option</p>
                 <div className="space-y-2">
                   {DELIVERY_OPTIONS.map((opt) => (
-                    <label key={opt.id} className={`flex items-start gap-3 rounded-xl2 border p-4 cursor-pointer transition-colors ${form.delivery === opt.id ? "border-fg/50" : "border-border hover:border-fg/20"}`}>
+                    <label key={opt.id} className={`flex items-start gap-3 rounded-xl2 border p-4 cursor-pointer transition-colors ${form.delivery === opt.id ? "border-[rgb(var(--fg)/0.5)]" : "border-border hover:border-[rgb(var(--fg)/0.2)]"}`}>
                       <input
                         type="radio"
                         name="delivery"
@@ -182,7 +182,7 @@ export default function CheckoutPage() {
                 />
               )}
 
-              <button type="submit" className="rounded-xl2 border border-border bg-transparent px-6 py-3 text-sm hover:border-fg/30 transition-colors">
+              <button type="submit" className="rounded-xl2 border border-border bg-transparent px-6 py-3 text-sm hover:border-[rgb(var(--fg)/0.3)] transition-colors">
                 Continue to payment →
               </button>
             </form>
@@ -211,14 +211,14 @@ export default function CheckoutPage() {
                 <button
                   type="button"
                   onClick={() => setStep("delivery")}
-                  className="rounded-xl2 border border-border bg-transparent px-5 py-3 text-sm text-muted hover:border-fg/30 transition-colors"
+                  className="rounded-xl2 border border-border bg-transparent px-5 py-3 text-sm text-muted hover:border-[rgb(var(--fg)/0.3)] transition-colors"
                 >
                   ← Back
                 </button>
                 <button
                   type="submit"
                   disabled={paying}
-                  className="rounded-xl2 border border-border bg-card px-6 py-3 text-sm hover:border-fg/30 transition-colors disabled:opacity-50"
+                  className="rounded-xl2 border border-border bg-card px-6 py-3 text-sm hover:border-[rgb(var(--fg)/0.3)] transition-colors disabled:opacity-50"
                 >
                   {paying ? "Sending prompt…" : `Pay ${formatKsh(total)} via M-Pesa`}
                 </button>

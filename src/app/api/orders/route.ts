@@ -1,18 +1,63 @@
 import { NextResponse } from "next/server";
+import { getSanityWriteClient } from "@/lib/sanity/write-client";
+
+type CartItem = {
+  id: string;
+  name: string;
+  slug: string;
+  quantity: number;
+  priceAmount: number;
+  priceDisplay: string;
+};
 
 export async function POST(req: Request) {
-  const { orderId, items, customer, delivery, total } = await req.json();
+  const { orderId, items, customer, delivery, total, checkoutRequestId } = await req.json();
 
   const apiKey = process.env.BREVO_API_KEY;
   const contactEmail = process.env.CONTACT_EMAIL ?? "hello@jojoscents.com";
 
-  if (!apiKey) {
-    return NextResponse.json({ ok: true }); // silent — email not configured
+  // ── 1. Persist order in Sanity ──────────────────────────────────────────────
+  const sanity = getSanityWriteClient();
+  if (sanity) {
+    await sanity
+      .create({
+        _type: "order",
+        reference: orderId,
+        status: "pending",
+        createdAt: new Date().toISOString(),
+        customer: {
+          name: customer.name ?? "",
+          phone: customer.phone ?? "",
+          email: customer.email ?? "",
+          address: customer.address ?? "",
+        },
+        items: (items as CartItem[]).map((i, idx) => ({
+          _key: `${i.slug ?? i.id}-${idx}`,
+          name: i.name,
+          slug: i.slug ?? i.id,
+          quantity: i.quantity,
+          priceAmount: i.priceAmount,
+        })),
+        delivery: {
+          id: delivery.id ?? "",
+          label: delivery.label ?? "",
+          price: delivery.price ?? 0,
+        },
+        total: Number(total),
+        checkoutRequestId: checkoutRequestId ?? "",
+        mpesaReceipt: "",
+        adminNotes: "",
+      })
+      .catch((err) => console.error("[orders] Sanity create failed:", err));
   }
 
-  const itemLines = items
-    .map((i: { name: string; quantity: number; priceAmount: number }) =>
-      `<li>${i.name} × ${i.quantity} — KSh ${(i.priceAmount * i.quantity).toLocaleString()}</li>`
+  // ── 2. Email notifications ───────────────────────────────────────────────────
+  if (!apiKey) return NextResponse.json({ ok: true });
+
+  const itemLines = (items as CartItem[])
+    .map(
+      (i) =>
+        `<li>${i.name} × ${i.quantity} — KSh ${(i.priceAmount * i.quantity).toLocaleString()}</li>`
     )
     .join("");
 
@@ -32,7 +77,7 @@ export async function POST(req: Request) {
         <strong>Address:</strong> ${customer.address || "Pickup"}</p>
         <ul>${itemLines}</ul>
         <p><strong>Total:</strong> KSh ${Number(total).toLocaleString()}</p>
-        <p><em>M-Pesa payment prompt sent. Awaiting PIN confirmation.</em></p>
+        <p><em>M-Pesa prompt sent to customer. Awaiting PIN.</em></p>
       `,
     }),
   });

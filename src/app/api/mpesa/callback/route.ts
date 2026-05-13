@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getSanityWriteClient } from "@/lib/sanity/write-client";
 
 export async function POST(req: Request) {
   try {
@@ -9,7 +10,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false }, { status: 400 });
     }
 
-    const { ResultCode, ResultDesc, MerchantRequestID, CheckoutRequestID, CallbackMetadata } = callback;
+    const { ResultCode, CallbackMetadata } = callback;
     const paid = ResultCode === 0;
 
     // Extract M-Pesa metadata
@@ -18,15 +19,34 @@ export async function POST(req: Request) {
       if (item.Value !== undefined) meta[item.Name] = item.Value;
     });
 
-    const orderId = String(meta.AccountReference ?? "");
-    const mpesaRef = String(meta.MpesaReceiptNumber ?? "");
-    const amount = Number(meta.Amount ?? 0);
-    const phone = String(meta.PhoneNumber ?? "");
+    const orderId   = String(meta.AccountReference ?? "");
+    const mpesaRef  = String(meta.MpesaReceiptNumber ?? "");
+    const amount    = Number(meta.Amount ?? 0);
+    const phone     = String(meta.PhoneNumber ?? "");
 
     console.log(`[mpesa/callback] Order: ${orderId} | Paid: ${paid} | Ref: ${mpesaRef} | Amount: ${amount}`);
 
     if (paid) {
-      // Send payment confirmation email to store owner
+      // ── 1. Update Sanity order: confirmed + receipt ─────────────────────────
+      const sanity = getSanityWriteClient();
+      if (sanity && orderId) {
+        const doc = await sanity
+          .fetch<{ _id: string } | null>(
+            `*[_type == "order" && reference == $ref][0]{_id}`,
+            { ref: orderId }
+          )
+          .catch(() => null);
+
+        if (doc?._id) {
+          await sanity
+            .patch(doc._id)
+            .set({ status: "confirmed", mpesaReceipt: mpesaRef })
+            .commit()
+            .catch((err) => console.error("[mpesa/callback] Sanity patch failed:", err));
+        }
+      }
+
+      // ── 2. Payment confirmation email to store owner ─────────────────────────
       const apiKey = process.env.BREVO_API_KEY;
       const contactEmail = process.env.CONTACT_EMAIL ?? "hello@jojoscents.com";
 
@@ -37,7 +57,7 @@ export async function POST(req: Request) {
           body: JSON.stringify({
             sender: { name: "JojoScents Payments", email: contactEmail },
             to: [{ email: contactEmail }],
-            subject: `✓ Payment received — ${orderId}`,
+            subject: `✓ Payment confirmed — ${orderId}`,
             htmlContent: `
               <p><strong>Order:</strong> ${orderId}</p>
               <p><strong>M-Pesa Ref:</strong> ${mpesaRef}</p>
@@ -49,6 +69,7 @@ export async function POST(req: Request) {
       }
     }
 
+    // Safaricom requires ResultCode 0 even for failed payments — just acknowledge
     return NextResponse.json({ ResultCode: 0, ResultDesc: "Accepted" });
   } catch (err) {
     console.error("[mpesa/callback]", err);

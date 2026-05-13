@@ -38,8 +38,7 @@ export default async function HomePage() {
           </Reveal>
           <Reveal delay={0.08}>
             <p className="text-muted leading-relaxed">
-              Crafted to feel like a luxury magazine: whitespace, restraint, and slow
-              motion—scents selected for character, not label.
+              A space for discovering scents through mood, memory, personality, and presence — not just brand names or pretty bottles.
             </p>
           </Reveal>
         </div>
