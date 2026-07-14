@@ -1,3 +1,4 @@
+import "server-only"
 import { createClient } from "next-sanity";
 
 let _client: ReturnType<typeof createClient> | null = null;

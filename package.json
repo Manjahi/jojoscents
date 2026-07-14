@@ -9,10 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@sanity/image-url": "^1.2.0",
+    "@sanity/image-url": "^2.1.1",
     "framer-motion": "^12.23.26",
     "next": "16.1.0",
-    "next-sanity": "^9.12.3",
+    "next-sanity": "^13.1.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "zustand": "^5.0.12"
