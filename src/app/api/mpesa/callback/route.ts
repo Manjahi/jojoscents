@@ -55,7 +55,7 @@ export async function POST(req: Request) {
           method: "POST",
           headers: { "api-key": apiKey, "Content-Type": "application/json" },
           body: JSON.stringify({
-            sender: { name: "JojoScents Payments", email: contactEmail },
+            sender: { name: "JojohScents Payments", email: contactEmail },
             to: [{ email: contactEmail }],
             subject: `✓ Payment confirmed — ${orderId}`,
             htmlContent: `

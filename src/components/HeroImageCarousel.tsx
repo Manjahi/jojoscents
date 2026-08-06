@@ -15,13 +15,13 @@ export default function HeroImageCarousel() {
 
   const slides: Slide[] = useMemo(
     () => [
-      { src: "/images/hero/hero-1.webp", alt: "JojoScents hero 1" },
-      { src: "/images/hero/hero-2.jpg", alt: "JojoScents hero 2" },
-      { src: "/images/hero/hero-3.webp", alt: "JojoScents hero 3" },
-      { src: "/images/hero/hero-4.jpg", alt: "JojoScents hero 4" },
-      { src: "/images/hero/hero-5.webp", alt: "JojoScents hero 5" },
-      { src: "/images/hero/hero-6.webp", alt: "JojoScents hero 6" },
-      { src: "/images/hero/hero-7.jpg", alt: "JojoScents hero 7" },
+      { src: "/images/hero/hero-1.webp", alt: "JojohScents hero 1" },
+      { src: "/images/hero/hero-2.jpg", alt: "JojohScents hero 2" },
+      { src: "/images/hero/hero-3.webp", alt: "JojohScents hero 3" },
+      { src: "/images/hero/hero-4.jpg", alt: "JojohScents hero 4" },
+      { src: "/images/hero/hero-5.webp", alt: "JojohScents hero 5" },
+      { src: "/images/hero/hero-6.webp", alt: "JojohScents hero 6" },
+      { src: "/images/hero/hero-7.jpg", alt: "JojohScents hero 7" },
     ],
     []
   );

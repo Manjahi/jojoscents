@@ -21,6 +21,9 @@ export type JournalDoc = {
   title: string;
   slug: string;
   excerpt?: string;
-  content?: string[];
+  content?: unknown[];
   publishedAt: string;
+  category?: string;
+  mainImage?: unknown;
+  featured?: boolean;
 };

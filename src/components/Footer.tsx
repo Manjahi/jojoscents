@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="mt-14 border-t border-border">
       <div className="mx-auto max-w-6xl px-5 md:px-8 py-10 flex flex-col md:flex-row gap-8 md:items-center md:justify-between">
         <div>
-          <p className="text-xs uppercase tracking-[0.18em] text-fg">JojoScents</p>
+          <p className="text-xs uppercase tracking-[0.18em] text-fg">JojohScents</p>
           <p className="mt-2 text-sm text-muted">Crafted quietly. Worn loudly.</p>
         </div>
 
@@ -24,7 +24,7 @@ export default function Footer() {
           </Link>
         </div>
 
-        <p className="text-sm text-muted">© {new Date().getFullYear()} JojoScents</p>
+        <p className="text-sm text-muted">© {new Date().getFullYear()} JojohScents</p>
       </div>
     </footer>
   );

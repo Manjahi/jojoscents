@@ -21,7 +21,7 @@ export async function POST(req: Request) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      sender: { name: "JojoScents Inquiry Form", email: contactEmail },
+      sender: { name: "JojohScents Inquiry Form", email: contactEmail },
       replyTo: { name, email },
       to: [{ email: contactEmail }],
       subject: `New inquiry from ${name}`,

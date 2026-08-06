@@ -3,7 +3,7 @@ import Reveal from "@/components/Reveal";
 import MotionGroup from "@/components/MotionGroup";
 import { getAllJournal } from "@/lib/sanity/queries";
 
-export const revalidate = 1800;
+export const revalidate = 300;
 
 export default async function JournalPage() {
   const posts = await getAllJournal();
@@ -32,7 +32,7 @@ export default async function JournalPage() {
               <Reveal key={post._id}>
                 <Link
                   href={`/journal/${post.slug}`}
-                  className="group block rounded-xl2 border border-border bg-card p-6 hover:border-fg/30 transition-colors"
+                  className="group block rounded-xl2 border border-border bg-card p-6 hover:border-[rgb(var(--fg)/0.3)] transition-colors"
                 >
                   <p className="text-xs uppercase tracking-[0.18em] text-muted">
                     {new Date(post.publishedAt).toLocaleDateString("en-KE", {

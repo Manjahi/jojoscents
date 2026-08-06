@@ -65,7 +65,7 @@ export async function POST(req: Request) {
     method: "POST",
     headers: { "api-key": apiKey, "Content-Type": "application/json" },
     body: JSON.stringify({
-      sender: { name: "JojoScents Orders", email: contactEmail },
+      sender: { name: "JojohScents Orders", email: contactEmail },
       to: [{ email: contactEmail }],
       subject: `New order ${orderId} — KSh ${Number(total).toLocaleString()}`,
       htmlContent: `
@@ -87,9 +87,9 @@ export async function POST(req: Request) {
         method: "POST",
         headers: { "api-key": apiKey, "Content-Type": "application/json" },
         body: JSON.stringify({
-          sender: { name: "JojoScents", email: contactEmail },
+          sender: { name: "JojohScents", email: contactEmail },
           to: [{ email: customer.email, name: customer.name }],
-          subject: `Your JojoScents order ${orderId}`,
+          subject: `Your JojohScents order ${orderId}`,
           htmlContent: `
             <p>Hi ${customer.name},</p>
             <p>Thank you for your order! Here's a summary:</p>
