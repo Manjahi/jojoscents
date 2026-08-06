@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const WHATSAPP_TEXT = "Hi JojoScents, I'd like a recommendation.";
+const WHATSAPP_TEXT = "Hi JojohScents, I'd like a recommendation.";
 
 export default function ContactSection() {
   const number = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "254700000000";

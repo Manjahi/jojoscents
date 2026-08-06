@@ -57,7 +57,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 bg-bg/80 backdrop-blur border-b border-border">
       <div className="mx-auto max-w-6xl px-5 py-4 flex items-center justify-between">
         <Link href="/" className="tracking-[0.18em] text-xs uppercase text-fg">
-          JojoScents
+          JojohScents
         </Link>
 
         {/* Desktop */}

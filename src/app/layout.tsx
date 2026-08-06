@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "JOJOSCENTS",
+  title: "JOJOHSCENTS",
   description: "A fragrance house—crafted as identity.",
 };
 

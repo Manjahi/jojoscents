@@ -60,7 +60,7 @@ export async function POST(req: Request) {
         PhoneNumber: phone,
         CallBackURL: callbackUrl,
         AccountReference: orderId,
-        TransactionDesc: `JojoScents ${orderId}`,
+        TransactionDesc: `JojohScents ${orderId}`,
       }),
     });
 

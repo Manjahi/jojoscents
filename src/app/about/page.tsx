@@ -3,7 +3,7 @@ import ContactSection from "@/components/ContactSection";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About — JojoScents",
+  title: "About — JojohScents",
   description: "A Nairobi fragrance house. Crafted quietly, worn loudly.",
 };
 
@@ -35,7 +35,7 @@ export default function AboutPage() {
 
         <Reveal delay={0.08}>
           <p className="mt-8 text-muted leading-relaxed">
-            JojoScents was born in Nairobi from a simple conviction: fragrance should feel
+            JojohScents was born in Nairobi from a simple conviction: fragrance should feel
             personal, not performative. We curate and blend scents that move with you—quietly,
             confidently, and without apology.
           </p>

@@ -22,7 +22,7 @@ export default async function ScentDetail({ params }: { params: Promise<{ slug: 
   const product = await getProductBySlug(slug);
   if (!product) return notFound();
 
-  const waText = `Hi JojoScents, I'm interested in ${product.name}.`;
+  const waText = `Hi JojohScents, I'm interested in ${product.name}.`;
   const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waText)}`;
 
   return (
