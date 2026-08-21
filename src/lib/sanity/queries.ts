@@ -65,6 +65,27 @@ export async function getProductBySlug(slug: string): Promise<SanityProduct | nu
   return fetchSanity<SanityProduct | null>(productBySlugQuery, { slug });
 }
 
+export type HeroSlide = { image: unknown; alt: string };
+
+const FALLBACK_SLIDES: HeroSlide[] = [
+  { image: null, alt: "JojohScents hero 1" },
+  { image: null, alt: "JojohScents hero 2" },
+  { image: null, alt: "JojohScents hero 3" },
+  { image: null, alt: "JojohScents hero 4" },
+  { image: null, alt: "JojohScents hero 5" },
+  { image: null, alt: "JojohScents hero 6" },
+  { image: null, alt: "JojohScents hero 7" },
+];
+
+export async function getHeroSlides(): Promise<HeroSlide[]> {
+  if (!isSanityConfigured()) return FALLBACK_SLIDES;
+  const doc = await fetchSanity<{ heroSlides?: HeroSlide[] } | null>(
+    `*[_type == "siteSettings"][0]{ heroSlides }`
+  );
+  if (!doc?.heroSlides?.length) return FALLBACK_SLIDES;
+  return doc.heroSlides;
+}
+
 export async function getAllJournal(): Promise<JournalDoc[]> {
   if (!isSanityConfigured()) {
     const { MOCK_JOURNAL } = await import("../mock");

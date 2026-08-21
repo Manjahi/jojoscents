@@ -38,7 +38,7 @@ function NavLink({
       <span
         className={[
           "absolute left-0 -bottom-1 h-px w-full transition-opacity",
-          active ? "opacity-100 bg-fg/60" : "opacity-0 bg-fg/40",
+          active ? "opacity-100 bg-[rgb(var(--fg)/0.6)]" : "opacity-0 bg-[rgb(var(--fg)/0.4)]",
         ].join(" ")}
       />
     </Link>
@@ -75,7 +75,7 @@ export default function Navbar() {
             type="button"
             aria-label="Toggle menu"
             onClick={() => setOpen((v) => !v)}
-            className="rounded-xl2 border border-border bg-card px-3 py-2 text-xs uppercase tracking-[0.18em] text-fg hover:border-fg/30 transition-colors"
+            className="rounded-xl2 border border-border bg-card px-3 py-2 text-xs uppercase tracking-[0.18em] text-fg hover:border-[rgb(var(--fg)/0.3)] transition-colors"
           >
             {open ? "Close" : "Menu"}
           </button>
