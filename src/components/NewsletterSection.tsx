@@ -48,12 +48,12 @@ export default function NewsletterSection() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email address"
-                className="flex-1 rounded-xl2 border border-border bg-transparent px-4 py-3 text-sm outline-none focus:border-fg/40 transition-colors"
+                className="flex-1 rounded-xl2 border border-border bg-transparent px-4 py-3 text-sm outline-none focus:border-[rgb(var(--fg)/0.4)] transition-colors"
               />
               <button
                 type="submit"
                 disabled={status === "sending"}
-                className="rounded-xl2 border border-border bg-transparent px-5 py-3 text-sm hover:border-fg/30 transition-colors disabled:opacity-50"
+                className="rounded-xl2 border border-border bg-transparent px-5 py-3 text-sm hover:border-[rgb(var(--fg)/0.3)] transition-colors disabled:opacity-50"
               >
                 {status === "sending" ? "Subscribing…" : "Subscribe"}
               </button>

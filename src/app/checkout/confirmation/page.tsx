@@ -40,13 +40,13 @@ function ConfirmationContent() {
       <div className="mt-8 flex flex-wrap gap-3">
         <Link
           href="/scents"
-          className="rounded-xl2 border border-border bg-card px-5 py-3 text-sm hover:border-fg/30 transition-colors"
+          className="rounded-xl2 border border-border bg-card px-5 py-3 text-sm hover:border-[rgb(var(--fg)/0.3)] transition-colors"
         >
           Continue shopping
         </Link>
         <Link
           href="/"
-          className="rounded-xl2 border border-border bg-transparent px-5 py-3 text-sm text-muted hover:border-fg/30 transition-colors"
+          className="rounded-xl2 border border-border bg-transparent px-5 py-3 text-sm text-muted hover:border-[rgb(var(--fg)/0.3)] transition-colors"
         >
           Back to home
         </Link>

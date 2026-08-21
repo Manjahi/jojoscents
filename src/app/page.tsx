@@ -4,7 +4,7 @@ import ProductGrid, { Product } from "@/components/ProductGrid";
 import NewsletterSection from "@/components/NewsletterSection";
 import ContactSection from "@/components/ContactSection";
 import Reveal from "@/components/Reveal";
-import { getFeaturedProducts, type SanityProduct } from "@/lib/sanity/queries";
+import { getFeaturedProducts, getHeroSlides, type SanityProduct } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
 
 function toProduct(p: SanityProduct): Product {
@@ -19,7 +19,10 @@ function toProduct(p: SanityProduct): Product {
 }
 
 export default async function HomePage() {
-  const products = await getFeaturedProducts();
+  const [products, heroSlides] = await Promise.all([
+    getFeaturedProducts(),
+    getHeroSlides(),
+  ]);
 
   const forWomen = products.filter((p) => p.audience === "Women").map(toProduct);
   const forMen = products.filter((p) => p.audience === "Men").map(toProduct);
@@ -28,7 +31,7 @@ export default async function HomePage() {
   return (
     <>
       <FullBleed>
-        <HeroImageCarousel />
+        <HeroImageCarousel slides={heroSlides} />
       </FullBleed>
 
       <section className="mt-16 md:mt-24">

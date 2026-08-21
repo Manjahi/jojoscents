@@ -40,7 +40,7 @@ export default function ProductGrid({
           <Link
             key={p.id}
             href={p.href ?? "/scents"}
-            className="group rounded-xl2 border border-border bg-card overflow-hidden hover:border-fg/25 transition-colors"
+            className="group rounded-xl2 border border-border bg-card overflow-hidden hover:border-[rgb(var(--fg)/0.25)] transition-colors"
           >
             <div className="relative h-64">
               <Image

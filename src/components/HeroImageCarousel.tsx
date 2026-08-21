@@ -4,26 +4,33 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { urlFor } from "@/lib/sanity/image";
+import type { HeroSlide } from "@/lib/sanity/queries";
 
-type Slide = {
-  src: string;
-  alt: string;
-};
+const LOCAL_FALLBACKS = [
+  "/images/hero/hero-1.webp",
+  "/images/hero/hero-2.jpg",
+  "/images/hero/hero-3.webp",
+  "/images/hero/hero-4.jpg",
+  "/images/hero/hero-5.webp",
+  "/images/hero/hero-6.webp",
+  "/images/hero/hero-7.jpg",
+];
 
-export default function HeroImageCarousel() {
+type ResolvedSlide = { src: string; alt: string };
+
+export default function HeroImageCarousel({ slides }: { slides: HeroSlide[] }) {
   const reduce = useReducedMotion();
 
-  const slides: Slide[] = useMemo(
-    () => [
-      { src: "/images/hero/hero-1.webp", alt: "JojohScents hero 1" },
-      { src: "/images/hero/hero-2.jpg", alt: "JojohScents hero 2" },
-      { src: "/images/hero/hero-3.webp", alt: "JojohScents hero 3" },
-      { src: "/images/hero/hero-4.jpg", alt: "JojohScents hero 4" },
-      { src: "/images/hero/hero-5.webp", alt: "JojohScents hero 5" },
-      { src: "/images/hero/hero-6.webp", alt: "JojohScents hero 6" },
-      { src: "/images/hero/hero-7.jpg", alt: "JojohScents hero 7" },
-    ],
-    []
+  const resolved: ResolvedSlide[] = useMemo(
+    () =>
+      slides.map((s, idx) => ({
+        src: s.image
+          ? urlFor(s.image as Parameters<typeof urlFor>[0], 1600)
+          : LOCAL_FALLBACKS[idx % LOCAL_FALLBACKS.length],
+        alt: s.alt,
+      })),
+    [slides]
   );
 
   const [index, setIndex] = useState(0);
@@ -31,11 +38,11 @@ export default function HeroImageCarousel() {
   // Autoplay (pause-friendly for reduced motion)
   useEffect(() => {
     if (reduce) return;
-    const id = setInterval(() => setIndex((i) => (i + 1) % slides.length), 6500);
+    const id = setInterval(() => setIndex((i) => (i + 1) % resolved.length), 6500);
     return () => clearInterval(id);
-  }, [slides.length, reduce]);
+  }, [resolved.length, reduce]);
 
-  const slide = slides[index];
+  const slide = resolved[index];
 
   return (
     // FULL-BLEED + Beysix-like framing
@@ -104,7 +111,7 @@ export default function HeroImageCarousel() {
 
           {/* Dots (bottom-right, Beysix-like) */}
           <div className="absolute bottom-5 right-6 md:right-10 flex gap-2">
-            {slides.map((_, i) => (
+            {resolved.map((_, i) => (
               <button
                 key={i}
                 aria-label={`Go to slide ${i + 1}`}
@@ -122,7 +129,7 @@ export default function HeroImageCarousel() {
           <button
             type="button"
             aria-label="Previous"
-            onClick={() => setIndex((i) => (i - 1 + slides.length) % slides.length)}
+            onClick={() => setIndex((i) => (i - 1 + resolved.length) % resolved.length)}
             className="absolute left-4 md:left-10 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-black/30 hover:bg-black/45 backdrop-blur border border-white/10 text-white transition-colors"
           >
             ‹
@@ -131,7 +138,7 @@ export default function HeroImageCarousel() {
           <button
             type="button"
             aria-label="Next"
-            onClick={() => setIndex((i) => (i + 1) % slides.length)}
+            onClick={() => setIndex((i) => (i + 1) % resolved.length)}
             className="absolute right-4 md:right-10 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-black/30 hover:bg-black/45 backdrop-blur border border-white/10 text-white transition-colors"
           >
             ›
